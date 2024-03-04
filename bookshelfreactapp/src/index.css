@@ -11,3 +11,62 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.disable {
+  pointer-events: none;
+  opacity: .6;
+}
+
+.main {
+  margin-top: 1.3rem;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  font: inherit;
+}
+
+i {
+  font-size: 1.2rem;
+}
+
+.pagination {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10rem;
+}
+
+.pagination a {
+  color: black;
+  padding: 5px 10px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.pagination a:first-child {
+  border-top-left-radius: var(--radius-5);
+  border-bottom-left-radius: var(--radius-5);
+}
+
+.pagination a:last-child {
+  border-top-right-radius: var(--radius-5);
+  border-bottom-right-radius: var(--radius-5);
+}
+
+.pagination a.active {
+  background-color: var(--selective-blue);
+  color: white;
+  border: 1px solid var(--selective-blue);
+}
+
+.pagination a:hover:not(.active){
+  background-color: #ecf1f1;
+}

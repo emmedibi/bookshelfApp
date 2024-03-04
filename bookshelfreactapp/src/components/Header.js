@@ -5,7 +5,7 @@ const Header = ({toggleModal, nbOfBooks}) => {
     <header className="header">
         <div className="container">
             <h3>Book List ({nbOfBooks})</h3>
-            <button onClick={() => toogleModal(true)} className='btn'>
+            <button onClick={() => toggleModal(true)} className='btn'>
                 <i className='bi bi-flower2'></i> Add new Book
             </button>
         </div>
