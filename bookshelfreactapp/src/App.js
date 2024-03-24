@@ -1,12 +1,14 @@
 import './App.css';
 import React, { useEffect, useRef, useState } from 'react';
-import {getBooks} from "./api/BookService";
+import {getBooks, saveBook, updateBook, updateCover} from "./api/BookService";
 import Header from "./components/Header"
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, Form, useAsyncError } from 'react-router-dom';
 import BookList from './components/BookList'
+import BooksDetails from './components/BooksDetails';
 
 function App() {
   const modalRef = useRef();
+  const fileRef = useRef();
   const [data, setData] = useState({});
   const [currentPage, setCurrentPage] = useState(0);
   const [file, setFile] = useState(undefined);
@@ -17,9 +19,35 @@ function App() {
     plot: '',
 });
 
+const handleNewBook = async (event) => {
+  event.preventDefault();
+  try {
+    const {data} = await saveBook(values);
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    formData.append('id', data.id);
+    const {data: coverUrl} = await updateCover(formData);
+    // Close the modal window //
+    toggleModal(false);
+    console.log(data);
+    //Set values as null or blank //
+    setFile(undefined);
+    fileRef.current.value = null;
+    setValues({
+      title: '',
+      author: '',
+      pages: 0,
+      plot: '',
+    });
+    getAllBooks();
+  } catch(error){
+    console.log(error);
+  }
+}
+
 const onChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value});
-    console.log(values);
+    // console.log(values);
 };
   
   const getAllBooks = async(page= 0, size=10) => {
@@ -29,6 +57,18 @@ const onChange = (event) => {
       setData(data);
       console.log(data);
     } catch(error){
+      console.log(error);
+    }
+  };
+
+  const updateBook = async () => {
+
+  };
+
+  const updateImage = async (formData) => {
+    try{
+      const {data: coverUrl} = await updateCover(formData);
+    } catch(error) {
       console.log(error);
     }
   };
@@ -47,7 +87,8 @@ const onChange = (event) => {
       <div className='container'>
         <Routes>
           <Route path="/" element={<Navigate to={'/books'} />}></Route>
-          <Route path="/books" element={ <BookList data = {data} currentPage = {currentPage} getAllBooks = { getAllBooks }/>} > </Route>
+          <Route path="/books" element={ <BookList data = { data } currentPage = { currentPage } getAllBooks = { getAllBooks }/>} > </Route>
+          <Route path="/books/:id" element={ <BooksDetails updateBook={ updateBook } updateImage={ updateImage }/>} > </Route>
         </Routes>
       </div>
     </main>
@@ -60,7 +101,7 @@ const onChange = (event) => {
       </div>
       <div className='divider'></div>
       <div className='modal__body'>
-        <form>
+        <form onSubmit={handleNewBook}>
           <div className='modal__details'>
             <div className='input-box'>
               <span className='details'>Title</span>
@@ -81,7 +122,7 @@ const onChange = (event) => {
             <div className='file-input'>
               <span className='details'>Cover</span>
               <br/>
-              <input type="file" onChange={(event) => {setFile(event.target.files[0])}} name="cover" required/>
+              <input type="file" onChange={(event) => {setFile(event.target.files[0])}} ref={fileRef} name="cover" required/>
             </div>
           </div>
           <div className='form_footer'>

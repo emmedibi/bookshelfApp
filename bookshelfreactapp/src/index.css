@@ -176,6 +176,9 @@ a {
   color:var(--spooky-black-1);
 }
 
+h3 {
+  display: inline-block;
+}
 .container {
   width: min(1400px, 100% - 2rem);
   margin-inline: auto;
@@ -435,21 +438,28 @@ dialog[open]{
   }
 }
 
-@media (max-width> 389px) {
   .profile__details {
-    justify-content: center;
-    place-self: center;
-    width: 100%;
+    display: flex;
+    flex-direction: row;
   }
 
   .profile__settings {
-    place-self: center;
+    width: 50%;
   }
 
   .profile__metadata {
-    text-align: center;
+    width:40%
   }
-}
+
+  .profile__settings p {
+    padding: 10px;
+  }
+
+  .profile__metadata button {
+    margin-top: 10px;
+
+  }
+
 
 .book-details {
   display: flex;
